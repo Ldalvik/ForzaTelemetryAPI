@@ -2,15 +2,15 @@ package org.example;
 
 import java.io.IOException;
 import java.net.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 
 public class App {
     public static void main(String[] args) throws IOException {
-       connectUDP(5300);
-    }
 
-    private static void connectUDP(int socket) throws IOException {
-        DatagramSocket ds = new DatagramSocket();
+        ForzaApi api = null;
+        DatagramSocket ds = new DatagramSocket(5300);
         byte[] receive = new byte[512];
 
         DatagramPacket dp;
@@ -18,19 +18,29 @@ public class App {
             dp = new DatagramPacket(receive, receive.length);
             ds.receive(dp);
             String allData = Arrays.toString(dp.getData());
-            String isRaceOn = String.valueOf(dp.getData()[0]);
-            float test = dp.getData()[1];
-            float test1 = dp.getData()[2];
-            float test2 = dp.getData()[3];
-            float test3 = dp.getData()[4];
-            float test4 = dp.getData()[5];
-            System.out.println("0:" + test);
-            System.out.println("1:" + test1);
-            System.out.println("2:" + test2);
-            System.out.println("3:" + test3);
-            System.out.println("4:" + test4);
-            System.out.println("5:" + allData);
+
+
+            api = new ForzaApi(dp.getData());
+            System.out.print("Engine max RPM: " + api.getEngineMaxRPM()+",");
+            System.out.print("Engine idle RPM: " + api.getEngineIdleRPM()+",");
+            System.out.print("Engine current RPM: " + api.getEngineCurrentRPM()+",");
+
+            System.out.print("Accel X: " + api.getAccelerationX()+",");
+            System.out.print("Accel Y: " + api.getAccelerationY()+",");
+            System.out.print("Accel Z: " + api.getAccelerationZ()+",");
+
+            System.out.print("Velocity X: " + api.getVelocityX()+",");
+            System.out.print("Velocity Y: " + api.getVelocityY()+",");
+            System.out.print("Velocity Z: " + api.getVelocityZ()+",");
+
+            System.out.print("Angular velocity X: " + api.getAngularVelocityX()+",");
+            System.out.print("Angular velocity Y: " + api.getAngularVelocityY()+",");
+            System.out.println("Angular velocity Z: " + api.getAngularVelocityZ()+",");
+
             receive = new byte[512];
         }
     }
+
+
+
 }
