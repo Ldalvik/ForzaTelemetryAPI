@@ -24,8 +24,8 @@ public class ForzaApi {
     }
 
     //ENGINE RPM//
-    public int getEngineMaxRPM(){
-        return getBytes(DATA_OUT, 8, 12).getInt();
+    public float getEngineMaxRPM(){
+        return getBytes(DATA_OUT, 8, 12).getFloat();
     }
     public float getEngineIdleRPM(){
         return getBytes(DATA_OUT, 12, 16).getFloat();
