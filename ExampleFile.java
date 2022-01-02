@@ -26,8 +26,12 @@ public class ExampleFile {
         while (true) {  //This will loop and receive data realtime
 
             dp = new DatagramPacket(receive, receive.length); //Pass bytes and packet size
-
-            ds.receive(dp); //receive UDP data stream and pass it to DatagramPacket
+            
+            try {
+                ds.receive(dp); //receive UDP data stream and pass it to DatagramPacket
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             String ALL_DATA = Arrays.toString(dp.getData()); //Full byte string parsed into a string array, good for debugging
 
