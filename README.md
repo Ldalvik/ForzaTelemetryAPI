@@ -27,7 +27,7 @@ Now, create a DatagramSocket and choose a port number. You can pick any, just se
             e.printStackTrace();
         }
 
-Create your byte buffer/packet size. In this case, 312 bytes are received by the UDP stream.
+Create your byte buffer/packet size. In this case, 320 bytes are received by the UDP stream.
 
     byte[] receive = new byte[320];  //Create packet buffer size, which in this case is 320
 
@@ -75,7 +75,7 @@ To get all the data in raw byte array form, use this:
 ## IMPORTANT!
 
 If you are a developer and want to know how to read the data for usage in other langauges or applications, read through ForzaApi.java
-and hopefully you can recreate it. You must receive a UDP stream of data from a socket, each chunk of data is 312 bytes. To parse it, you must
+and hopefully you can recreate it. You must receive a UDP stream of data from a socket, each chunk of data is 320 bytes. To parse it, you must
 order the bytes into an array using the LITTLE ENDIAN order. You can see how it works in the getBytes() method in ForzaApi.java.
 Each set of data is 4 bytes long, with an exception for some of the last ones which are 1 and 2 bytes long. Most of them return floats,
 but some of them will return ints, booleans, or bytes, one even returns a short.
