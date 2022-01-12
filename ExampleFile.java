@@ -1,4 +1,4 @@
-package YOUR.PACKAGE.NAME;
+package org.example;
 
 import java.io.IOException;
 import java.net.*;
@@ -12,7 +12,7 @@ public class ExampleFile {
 
         int UDP_PORT = 5300;  //This can be any port you want, just be sure to set it in your game settings
 
-        DatagramSocket ds = null;  //Initialize UDP stream socket and attempt to connect
+        DatagramSocket ds = null;  //Initialize UDP stream socket
         try {
             ds = new DatagramSocket(UDP_PORT);
         } catch (SocketException e) {
@@ -26,7 +26,7 @@ public class ExampleFile {
         while (true) {  //This will loop and receive data realtime
 
             dp = new DatagramPacket(receive, receive.length); //Pass bytes and packet size
-            
+
             try {
                 ds.receive(dp); //receive UDP data stream and pass it to DatagramPacket
             } catch (IOException e) {
@@ -45,117 +45,118 @@ public class ExampleFile {
             I'm not sure about the telemetry data structures for any other
             games besides FORZA HORIZON 4 and FORZA HORIZON 5. Maybe I'll make one
             some day, but it's kinda irrelevant at this point.
-             */
+            */
 
-            int timestamp     = api.getTimeStampMS();
 
-						float engineMaxRPM     = api.getEngineMaxRPM();
-						float engineIdleRPM    = api.getEngineIdleRPM();
-						float engineCurrentRPM = api.getEngineCurrentRPM();
+            float timestamp = api.getTimeStampMS();
 
-						float accelerationX    = api.getAccelerationX();
-						float accelerationY    = api.getAccelerationY();
-						float apiAccelerationZ = api.getAccelerationZ();
+            float engineMaxRPM = api.getEngineMaxRPM();
+            float engineIdleRPM = api.getEngineIdleRPM();
+            float engineCurrentRPM = api.getEngineCurrentRPM();
 
-						float velocityX = api.getVelocityX();
-						float velocityY = api.getVelocityY();
-						float velocityZ = api.getVelocityZ();
-						float velocity = api.getVelocity();
-						float angularVelocityX = api.getAngularVelocityX();
-						float angularVelocityY = api.getAngularVelocityY();
-						float angularVelocityZ = api.getAngularVelocityZ();
+            float accelerationX = api.getAccelerationX();
+            float accelerationY = api.getAccelerationY();
+            float apiAccelerationZ = api.getAccelerationZ();
 
-						float yaw   = api.getYaw();
-						float pitch = api.getPitch();
-						float roll  = api.getRoll();
+            float velocityX = api.getVelocityX();
+            float velocityY = api.getVelocityY();
+            float velocityZ = api.getVelocityZ();
+            float averageVelocity = api.getVelocity();
 
-						float normalizedSuspensionTravelFrontLeft  = api.getNormalizedSuspensionTravelFrontLeft();
-						float normalizedSuspensionTravelFrontRight = api.getNormalizedSuspensionTravelFrontRight();
-						float normalizedSuspensionTravelRearLeft   = api.getNormalizedSuspensionTravelRearLeft();
-						float normalizedSuspensionTravelRearRight  = api.getNormalizedSuspensionTravelRearRight();
+            float angularVelocityX = api.getAngularVelocityX();
+            float angularVelocityY = api.getAngularVelocityY();
+            float angularVelocityZ = api.getAngularVelocityZ();
 
-						float tireSlipRatioFrontLeft  = api.getTireSlipRatioFrontLeft();
-						float tireSlipRatioFrontRight = api.getTireSlipRatioFrontRight();
-						float tireSlipRatioRearLeft   = api.getTireSlipRatioRearLeft();
-						float tireSlipRatioRearRight  = api.getTireSlipRatioRearRight();
+            float yaw = api.getYaw();
+            float pitch = api.getPitch();
+            float roll = api.getRoll();
 
-						float wheelRotationSpeedFrontLeft  = api.getWheelRotationSpeedFrontLeft();
-						float wheelRotationSpeedFrontRight = api.getWheelRotationSpeedFrontRight();
-						float wheelRotationSpeedRearLeft   = api.getWheelRotationSpeedRearLeft();
-						float wheelRotationSpeedRearRight  = api.getWheelRotationSpeedRearRight();
+            float normalizedSuspensionTravelFrontLeft = api.getNormalizedSuspensionTravelFrontLeft();
+            float normalizedSuspensionTravelFrontRight = api.getNormalizedSuspensionTravelFrontRight();
+            float normalizedSuspensionTravelRearLeft = api.getNormalizedSuspensionTravelRearLeft();
+            float normalizedSuspensionTravelRearRight = api.getNormalizedSuspensionTravelRearRight();
 
-						float wheelOnRumbleStripFrontLeft  = api.getWheelOnRumbleStripFrontLeft();
-						float wheelOnRumbleStripFrontRight = api.getWheelOnRumbleStripFrontRight();
-						float wheelOnRumbleStripRearLeft   = api.getWheelOnRumbleStripRearLeft();
-						float wheelOnRumbleStripRearRight  = api.getWheelOnRumbleStripRearRight();
+            float tireSlipRatioFrontLeft = api.getTireSlipRatioFrontLeft();
+            float tireSlipRatioFrontRight = api.getTireSlipRatioFrontRight();
+            float tireSlipRatioRearLeft = api.getTireSlipRatioRearLeft();
+            float tireSlipRatioRearRight = api.getTireSlipRatioRearRight();
 
-						float wheelInPuddleDepthFrontLeft  = api.getWheelInPuddleDepthFrontLeft();
-						float wheelInPuddleDepthFrontRight = api.getWheelInPuddleDepthFrontRight();
-						float wheelInPuddleDepthRearLeft   = api.getWheelInPuddleDepthRearLeft();
-						float wheelInPuddleDepthRearRight  = api.getWheelInPuddleDepthRearRight();
+            float wheelRotationSpeedFrontLeft = api.getWheelRotationSpeedFrontLeft();
+            float wheelRotationSpeedFrontRight = api.getWheelRotationSpeedFrontRight();
+            float wheelRotationSpeedRearLeft = api.getWheelRotationSpeedRearLeft();
+            float wheelRotationSpeedRearRight = api.getWheelRotationSpeedRearRight();
 
-						float surfaceRumbleFrontLeft  = api.getSurfaceRumbleFrontLeft();
-						float surfaceRumbleFrontRight = api.getSurfaceRumbleFrontRight();
-						float surfaceRumbleRearLeft   = api.getSurfaceRumbleRearLeft();
-						float surfaceRumbleRearRight  = api.getSurfaceRumbleRearRight();
+            float wheelOnRumbleStripFrontLeft = api.getWheelOnRumbleStripFrontLeft();
+            float wheelOnRumbleStripFrontRight = api.getWheelOnRumbleStripFrontRight();
+            float wheelOnRumbleStripRearLeft = api.getWheelOnRumbleStripRearLeft();
+            float wheelOnRumbleStripRearRight = api.getWheelOnRumbleStripRearRight();
 
-						float tireSlipAngleFrontLeft  = api.getTireSlipAngleFrontLeft();
-						float tireSlipAngleFrontRight = api.getTireSlipAngleFrontRight();
-						float tireSlipAngleRearLeft   = api.getTireSlipAngleRearLeft();
-						float tireSlipAngleRearRight  = api.getTireSlipAngleRearRight();
+            float wheelInPuddleDepthFrontLeft = api.getWheelInPuddleDepthFrontLeft();
+            float wheelInPuddleDepthFrontRight = api.getWheelInPuddleDepthFrontRight();
+            float wheelInPuddleDepthRearLeft = api.getWheelInPuddleDepthRearLeft();
+            float wheelInPuddleDepthRearRight = api.getWheelInPuddleDepthRearRight();
 
-						float tireCombinedSlipFrontLeft  = api.getTireCombinedSlipFrontLeft();
-						float tireCombinedSlipFrontRight = api.getTireCombinedSlipFrontRight();
-						float tireCombinedSlipRearLeft   = api.getTireCombinedSlipRearLeft();
-						float tireCombinedSlipRearRight  = api.getTireCombinedSlipRearRight();
+            float surfaceRumbleFrontLeft = api.getSurfaceRumbleFrontLeft();
+            float surfaceRumbleFrontRight = api.getSurfaceRumbleFrontRight();
+            float surfaceRumbleRearLeft = api.getSurfaceRumbleRearLeft();
+            float surfaceRumbleRearRight = api.getSurfaceRumbleRearRight();
 
-						float suspensionTravelMetersFrontLeft  = api.getSuspensionTravelMetersFrontLeft();
-						float suspensionTravelMetersFrontRight = api.getSuspensionTravelMetersFrontRight();
-						float suspensionTravelMetersRearLeft   = api.getSuspensionTravelMetersRearLeft();
-						float suspensionTravelMetersRearRight  = api.getSuspensionTravelMetersRearRight();
+            float tireSlipAngleFrontLeft = api.getTireSlipAngleFrontLeft();
+            float tireSlipAngleFrontRight = api.getTireSlipAngleFrontRight();
+            float tireSlipAngleRearLeft = api.getTireSlipAngleRearLeft();
+            float tireSlipAngleRearRight = api.getTireSlipAngleRearRight();
 
-						int carOrdinal          = api.getCarOrdinal();
-						int carClass            = api.getCarClass();
-						int carPerformanceIndex = api.getCarPerformanceIndex();
-						int driveTrain          = api.getDriveTrain();
-						int numberOfCylinders   = api.getNumberOfCylinders();
-						int carCategory         = api.getCarCategory();
-						int unknown1            = api.getUnknown1();
-						int unknown2            = api.getUnknown2();
-						
-						float positionX = api.getPositionX();
-						float positionY = api.getPositionY();
-						float positionZ = api.getPositionZ();
+            float tireCombinedSlipFrontLeft = api.getTireCombinedSlipFrontLeft();
+            float tireCombinedSlipFrontRight = api.getTireCombinedSlipFrontRight();
+            float tireCombinedSlipRearLeft = api.getTireCombinedSlipRearLeft();
+            float tireCombinedSlipRearRight = api.getTireCombinedSlipRearRight();
 
-						float speed  = api.getSpeed();
-						float power  = api.getPower();
-						float torque = api.getTorque();
+            float suspensionTravelMetersFrontLeft = api.getSuspensionTravelMetersFrontLeft();
+            float suspensionTravelMetersFrontRight = api.getSuspensionTravelMetersFrontRight();
+            float suspensionTravelMetersRearLeft = api.getSuspensionTravelMetersRearLeft();
+            float suspensionTravelMetersRearRight = api.getSuspensionTravelMetersRearRight();
 
-						float tireTempFrontLeft  = api.getTireTempFrontLeft();
-						float tireTempFrontRight = api.getTireTempFrontRight();
-						float tireTempRearLeft   = api.getTireTempRearLeft();
-						float tireTempRearRight  = api.getTireTempRearRight();
-						float tireTempAverageTotal    = api.getTireTempAverageTotal();
-						float boost            = api.getBoost();
-						float fuel             = api.getFuel();
-						float distanceTraveled = api.getDistanceTraveled();
-						float bestLap          = api.getBestLap();
-						float lastLap          = api.getLastLap();
-						float currentLap       = api.getCurrentLap();
-						int lapNumber          = api.getLapNumber();
-						int racePosition    = api.getRacePosition();
+            int carOrdinal = api.getCarOrdinal();
+            int carClass = api.getCarClass();
+            int carPerformanceIndex = api.getCarPerformanceIndex();
+            int driveTrain = api.getDriveTrain();
+            int numberOfCylinders = api.getNumberOfCylinders();
 
-						int accel                       = api.getAccel();
-						float brake                       = api.getBrake();
-						float clutch                      = api.getClutch();
-						byte handbrake                   = api.getHandbrake();
-						byte gear                        = api.getGear();
-						byte steer                       = api.getSteer();
-						short normalizedDrivingLine      = api.getNormalizedDrivingLine();
-	
+            float positionX = api.getPositionX();
+            float positionY = api.getPositionY();
+            float positionZ = api.getPositionZ();
+
+            float speed = api.getSpeed();
+            float power = api.getPower();
+            float torque = api.getTorque();
+
+            float tireTempFrontLeft = api.getTireTempFrontLeft();
+            float tireTempFrontRight = api.getTireTempFrontRight();
+            float tireTempRearLeft = api.getTireTempRearLeft();
+            float tireTempRearRight = api.getTireTempRearRight();
+            float tireTempAverageFront = api.getTireTempAverageFront();
+            float tireTempAverageRear = api.getTireTempAverageRear();
+
+            float boost = api.getBoost();
+            float fuel = api.getFuel();
+            float distanceTraveled = api.getDistanceTraveled();
+            float bestLap = api.getBestLap();
+            float lastLap = api.getLastLap();
+            float currentLap = api.getCurrentLap();
+            short lapNumber = api.getLapNumber();
+            byte racePosition = api.getRacePosition();
+
+            byte accel = api.getAccel();
+            byte brake = api.getBrake();
+            byte clutch = api.getClutch();
+            byte handbrake = api.getHandbrake();
+            byte gear = api.getGear();
+            byte steer = api.getSteer();
+            short normalizedDrivingLine = api.getNormalizedDrivingLine();
+            byte normalizedAIBrakeDifference = api.getNormalizedAIBrakeDifference();
+
+
             receive = new byte[323]; //Clear byte buffer
         }
     }
-
-
 }
