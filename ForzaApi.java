@@ -1,4 +1,4 @@
-package YOUR.PACKAGE.NAME;
+package org.example;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -11,8 +11,7 @@ public class ForzaApi {
      * Constructor class for ForzaApi. Receives byte
      * data array and passes it to {@code DATA_OUT}
      *
-     * @param   bytes   the packet data.
-     *
+     * @param bytes the packet data.
      */
 
     public ForzaApi(byte[] bytes) {
@@ -269,18 +268,18 @@ public class ForzaApi {
         return getBytes(DATA_OUT, 228, 232).getInt();
     }
 
-	public int getCarCategory(){
-		return getBytes(DATA_OUT, 232, 236).getInt();
-	}
-	
-	public int getUnknown1(){
-		return getBytes(DATA_OUT, 236, 240).getInt();
-	}
-	
-	public int getUnknown2(){
-		return getBytes(DATA_OUT, 240, 244).getInt();
-	}
-	
+    public int getCarCategory() {
+        return getBytes(DATA_OUT, 232, 236).getInt();
+    }
+
+    public int getUnknown1() {
+        return getBytes(DATA_OUT, 236, 240).getInt();
+    }
+
+    public int getUnknown2() {
+        return getBytes(DATA_OUT, 240, 244).getInt();
+    }
+
     //POSITION AXIS//
     public float getPositionX() {
         return getBytes(DATA_OUT, 244, 248).getFloat();
@@ -313,7 +312,7 @@ public class ForzaApi {
     }
 
     public float getTireTempFrontRight() {
-        return getBytes(DATA_OUT,272, 276).getFloat();
+        return getBytes(DATA_OUT, 272, 276).getFloat();
     }
 
     public float getTireTempRearLeft() {
@@ -349,87 +348,95 @@ public class ForzaApi {
         return getBytes(DATA_OUT, 308, 312).getFloat();
     }
 
-	public byte getLapNumber() {
-        return getBytes(DATA_OUT, 312, 314).get() ;
+    //Thank you PinkiePie for fixing
+    public short getLapNumber() {
+        return (short) ((getBytes(DATA_OUT, 313, 314).get() << 8) |
+                (getBytes(DATA_OUT, 312, 313).get() & 0xFF));
     }
-	
-	public byte getRacePosition(){
-		return getBytes(DATA_OUT, 314, 315).get();
-	}
-	
+
+    public byte getRacePosition() {
+        return getBytes(DATA_OUT, 314, 315).get();
+    }
+
     public byte getAccel() {
         return (byte) (getBytes(DATA_OUT, 315, 316).get() & 0xFF);
     }
 
     public byte getBrake() {
-        return (byte)(getBytes(DATA_OUT, 316, 317).get() & 0xFF);
+        return (byte) (getBytes(DATA_OUT, 316, 317).get() & 0xFF);
     }
-	
-	public byte getClutch() {
-        return (byte)(getBytes(DATA_OUT, 317, 318).get() & 0xFF);
+
+    public byte getClutch() {
+        return (byte) (getBytes(DATA_OUT, 317, 318).get() & 0xFF);
     }
-	
-	public byte getHandbrake() {
+
+    public byte getHandbrake() {
         return (byte) (getBytes(DATA_OUT, 318, 319).get() & 0xFF);
     }
-	
+
     public byte getGear() {
         return (byte) (getBytes(DATA_OUT, 319, 320).get() & 0xFF);
     }
-	
-	public byte getSteer() {
-        return (byte)(getBytes(DATA_OUT, 320, 321).get() & 0xFF);
+
+    public byte getSteer() {
+        return (byte) (getBytes(DATA_OUT, 320, 321).get() & 0xFF);
     }
 
     //MISC//
-    public short getNormalizedDrivingLine() {
-        return (byte) (getBytes(DATA_OUT, 321, 323).getShort());
+    //Thank you PinkiePie for fixing
+    public byte getNormalizedDrivingLine() {
+        return (byte) (getBytes(DATA_OUT, 321, 322).get() & 0xFF);
     }
-	
-	public float getVelocity(){
-		return getVector3DLength(getVelocityX(),getVelocityY(),getVelocityZ());
-	}
 
-	public float getTireTempAverageFront() {
-        return getAverage(getTireTempFrontLeft(),getTireTempFrontRight());
-        
+    public byte getNormalizedAIBrakeDifference() {
+        return (byte) (getBytes(DATA_OUT, 322, 323).get() & 0xFF);
+    }
+
+    public float getVelocity() {
+        return getVector3DLength(getVelocityX(), getVelocityY(), getVelocityZ());
+    }
+
+    public float getTireTempAverageFront() {
+        return getAverage(getTireTempFrontLeft(), getTireTempFrontRight());
+
     }
 
     public float getTireTempAverageRear() {
-        return getAverage(getTireTempRearLeft(),getTireTempRearRight());
+        return getAverage(getTireTempRearLeft(), getTireTempRearRight());
     }
-	
-	private float getAverage(float valueOne, float valueTwo, float valueThree, float valueFour) {
+
+    private float getAverage(float valueOne, float valueTwo, float valueThree, float valueFour) {
         return (valueOne + valueTwo + valueThree + valueFour) / 4f;
     }
 
-	public float getTireTempAverageLeft() {
+    public float getTireTempAverageLeft() {
         return getAverage(
-			getTireTempFrontLeft(),
-			getTireTempRearLeft()
+                getTireTempFrontLeft(),
+                getTireTempRearLeft()
         );
     }
 
     public float getTireTempAverageRight() {
-        return getAverage(getTireTempFrontRight(),getTireTempRearRight());
+        return getAverage(getTireTempFrontRight(), getTireTempRearRight());
     }
 
     public float getTireTempAverageTotal() {
         return getAverage(
-			getTireTempFrontLeft(),
-			getTireTempFrontRight(),
-			getTireTempRearLeft(),
-			getTireTempRearRight()
+                getTireTempFrontLeft(),
+                getTireTempFrontRight(),
+                getTireTempRearLeft(),
+                getTireTempRearRight()
         );
-	}
-	
+    }
+
     private float getAverage(float valueOne, float valueTwo) {
         return (valueOne + valueTwo) / 2f;
     }
-	
+
     private float getVector3DLength(float x, float y, float z) {
-        return (float) Math.sqrt(x*x + y*y + z*z);
+        return (float) Math.sqrt(x * x + y * y + z * z);
     }
+
     private ByteBuffer getBytes(byte[] array, int a, int b) {
         return ByteBuffer.wrap(Arrays.copyOfRange(array, a, b)).order(ByteOrder.LITTLE_ENDIAN);
     }
