@@ -3,9 +3,6 @@ Forza DATA OUT telemetry wrapper. Used to pull data from in-game using its built
 
 # HOW TO USE
 
-WARNING!!!! THIS WRAPPER IS INCOMPLETE AFTER REALIZING THERE ARE MULTIPLE UNKNOWN VALUES. ALL 
-VALUES AFTER METHOD getCarCategory() (as of this moment) DO NOT WORK AND WILL NOT RETURN CORRECT BYTE DATA. THIS WRAPPER WILL WORK FOR ALL METHODS BEFORE THAT.
-
 If you want to run and see realtime data in the terminal, use the ExampleFile.java in an IDE (alongside ForzaApi of course),
 which has the variables for every set of data. It also contains the full UDP socket connection process which I will explain below.
 
@@ -27,9 +24,9 @@ Now, create a DatagramSocket and choose a port number. You can pick any, just se
             e.printStackTrace();
         }
 
-Create your byte buffer/packet size. In this case, 320 bytes are received by the UDP stream.
+Create your byte buffer/packet size. In this case, 323 bytes are received by the UDP stream.
 
-    byte[] receive = new byte[320];  //Create packet buffer size, which in this case is 320
+    byte[] receive = new byte[320];  //Create packet buffer size, which in this case is 323
 
 Here is the fun part. Create a DatagramPacket and give it a value of null, and create an infinite (while) loop below it.
 
@@ -51,7 +48,7 @@ then pass it to the DatagramSocket. Add this to your loop.
             
 To clear the byte buffer after every loop, add this to the bottom of your loop. Don't put anything below it.
 
-    receive = new byte[320]; //Clear byte buffer
+    receive = new byte[323]; //Clear byte buffer
 
 Now, to start getting data you have to initialize ForzaApi in the loop and pass it the bytes from DatagramPacket using getData().
 
