@@ -19,7 +19,7 @@ public class ExampleFile {
             e.printStackTrace();
         }
 
-        byte[] receive = new byte[312];  //Create packet buffer size, which in this case is 312
+        byte[] receive = new byte[323];  //Create packet buffer size, which in this case is 312
 
         DatagramPacket dp;
 
@@ -153,7 +153,7 @@ public class ExampleFile {
 						byte steer                       = api.getSteer();
 						short normalizedDrivingLine      = api.getNormalizedDrivingLine();
 	
-            receive = new byte[312]; //Clear byte buffer
+            receive = new byte[323]; //Clear byte buffer
         }
     }
 
