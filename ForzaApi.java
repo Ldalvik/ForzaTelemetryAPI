@@ -350,9 +350,9 @@ public class ForzaApi {
 
     //Thank you PinkiePie for fixing
     public short getLapNumber() {
-        return (short) ((getBytes(DATA_OUT, 313, 314).get() << 8) |
-                (getBytes(DATA_OUT, 312, 313).get() & 0xFF));
-    }
+       return (short) ((short) ((getBytes(DATA_OUT, 313, 314).get() << 8) |
+                               (getBytes(DATA_OUT, 312, 313).get() & 0xFF))+1);
+   }
 
     public byte getRacePosition() {
         return getBytes(DATA_OUT, 314, 315).get();
