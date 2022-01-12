@@ -26,7 +26,7 @@ Now, create a DatagramSocket and choose a port number. You can pick any, just se
 
 Create your byte buffer/packet size. In this case, 323 bytes are received by the UDP stream.
 
-    byte[] receive = new byte[320];  //Create packet buffer size, which in this case is 323
+    byte[] receive = new byte[323];  //Create packet buffer size, which in this case is 323
 
 Here is the fun part. Create a DatagramPacket and give it a value of null, and create an infinite (while) loop below it.
 
