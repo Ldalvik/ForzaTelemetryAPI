@@ -350,9 +350,9 @@ public class ForzaApi {
 
     //Thank you PinkiePie for fixing
     public short getLapNumber() {
-       return (short) ((short) ((getBytes(DATA_OUT, 313, 314).get() << 8) |
-                               (getBytes(DATA_OUT, 312, 313).get() & 0xFF))+1);
-   }
+        return (short) ((getBytes(DATA_OUT, 313, 314).get() << 8) |
+			(getBytes(DATA_OUT, 312, 313).get() & 0xFF));
+    }
 
     public byte getRacePosition() {
         return getBytes(DATA_OUT, 314, 315).get();
@@ -411,8 +411,8 @@ public class ForzaApi {
 
     public float getTireTempAverageLeft() {
         return getAverage(
-                getTireTempFrontLeft(),
-                getTireTempRearLeft()
+			getTireTempFrontLeft(),
+			getTireTempRearLeft()
         );
     }
 
@@ -422,10 +422,10 @@ public class ForzaApi {
 
     public float getTireTempAverageTotal() {
         return getAverage(
-                getTireTempFrontLeft(),
-                getTireTempFrontRight(),
-                getTireTempRearLeft(),
-                getTireTempRearRight()
+			getTireTempFrontLeft(),
+			getTireTempFrontRight(),
+			getTireTempRearLeft(),
+			getTireTempRearRight()
         );
     }
 
