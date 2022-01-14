@@ -172,7 +172,7 @@ public class ForzaApi {
     }
 
     public float getWheelInPuddleDepthRearLeft() {
-        return getBytes(DATA_OUT, 140, 144).getInt();
+        return getBytes(DATA_OUT, 140, 144).getFloat();
     }
 
     public float getWheelInPuddleDepthRearRight() {
