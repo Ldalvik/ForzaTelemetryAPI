@@ -143,7 +143,7 @@ public class ExampleFile {
             float bestLap = api.getBestLap();
             float lastLap = api.getLastLap();
             float currentLap = api.getCurrentLap();
-            short lapNumber = api.getLapNumber();
+            int lapNumber = api.getLapNumber();
             byte racePosition = api.getRacePosition();
 
             byte accel = api.getAccel();
@@ -152,9 +152,9 @@ public class ExampleFile {
             byte handbrake = api.getHandbrake();
             byte gear = api.getGear();
             byte steer = api.getSteer();
-            short normalizedDrivingLine = api.getNormalizedDrivingLine();
+            byte normalizedDrivingLine = api.getNormalizedDrivingLine();
             byte normalizedAIBrakeDifference = api.getNormalizedAIBrakeDifference();
-
+            System.out.println("isGameOn: " + isRaceOn + "  :-:  " + "CAR ORDINAL: " + carOrdinal);
 
             receive = new byte[323]; //Clear byte buffer
         }
