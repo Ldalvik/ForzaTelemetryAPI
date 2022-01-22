@@ -2,397 +2,728 @@ package org.example;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Arrays;
 
 public class ForzaApi {
-    byte[] DATA_OUT;
+    public static final int PACKET_SIZE = 323;
+    private boolean readOK = false;
 
-    /**
-     * Constructor class for ForzaApi. Receives byte
-     * data array and passes it to {@code DATA_OUT}
-     *
-     * @param bytes the packet data.
-     */
+    private boolean isRaceOn;
+    private Long timeStampMS;
+    private Float engineMaxRpm;
+    private Float engineIdleRpm;
+    private Float currentEngineRpm;
+    private Float accelerationX;
+    private Float accelerationY;
+    private Float accelerationZ;
+    private Float velocityX;
+    private Float velocityY;
+    private Float velocityZ;
+    private Float angularVelocityX;
+    private Float angularVelocityY;
+    private Float angularVelocityZ;
+    private Float yaw;
+    private Float pitch;
+    private Float roll;
+    private Float normalizedSuspensionTravelFrontLeft;
+    private Float normalizedSuspensionTravelFrontRight;
+    private Float normalizedSuspensionTravelRearLeft;
+    private Float normalizedSuspensionTravelRearRight;
+    private Float tireSlipRatioFrontLeft;
+    private Float tireSlipRatioFrontRight;
+    private Float tireSlipRatioRearLeft;
+    private Float tireSlipRatioRearRight;
+    private Float wheelRotationSpeedFrontLeft;
+    private Float wheelRotationSpeedFrontRight;
+    private Float wheelRotationSpeedRearLeft;
+    private Float wheelRotationSpeedRearRight;
+    private Integer wheelOnRumbleStripFrontLeft;
+    private Integer wheelOnRumbleStripFrontRight;
+    private Integer wheelOnRumbleStripRearLeft;
+    private Integer wheelOnRumbleStripRearRight;
+    private Float wheelInPuddleDepthFrontLeft;
+    private Float wheelInPuddleDepthFrontRight;
+    private Float wheelInPuddleDepthRearLeft;
+    private Float wheelInPuddleDepthRearRight;
+    private Float surfaceRumbleFrontLeft;
+    private Float surfaceRumbleFrontRight;
+    private Float surfaceRumbleRearLeft;
+    private Float surfaceRumbleRearRight;
+    private Float tireSlipAngleFrontLeft;
+    private Float tireSlipAngleFrontRight;
+    private Float tireSlipAngleRearLeft;
+    private Float tireSlipAngleRearRight;
+    private Float tireCombinedSlipFrontLeft;
+    private Float tireCombinedSlipFrontRight;
+    private Float tireCombinedSlipRearLeft;
+    private Float tireCombinedSlipRearRight;
+    private Float suspensionTravelMetersFrontLeft;
+    private Float suspensionTravelMetersFrontRight;
+    private Float suspensionTravelMetersRearLeft;
+    private Float suspensionTravelMetersRearRight;
+    private Integer carClass;
+    private Integer carPerformanceIndex;
+    private Integer drivetrainType;
+    private Integer numCylinders;
+    private Integer carType;
+    private Byte unknown1;
+    private Byte unknown2;
+    private Byte unknown3;
+    private Byte unknown4;
+    private Byte unknown5;
+    private Byte unknown6;
+    private Byte unknown7;
+    private Byte unknown8;
+    private Integer carOrdinal;
+    private Float positionX;
+    private Float positionY;
+    private Float positionZ;
+    private Float speed;
+    private Float power;
+    private Float torque;
+    private Float tireTempFrontLeft;
+    private Float tireTempFrontRight;
+    private Float tireTempRearLeft;
+    private Float tireTempRearRight;
+    private Float boost;
+    private Float fuel;
+    private Float distanceTraveled;
+    private Float bestLap;
+    private Float lastLap;
+    private Float currentLap;
+    private Float currentRaceTime;
+    private Short lapNumber;
+    private Byte racePosition;
+    private Byte accel;
+    private Byte brake;
+    private Byte clutch;
+    private Byte handbrake;
+    private Byte gear;
+    private Byte steer;
+    private Byte normalizedDrivingLine;
+    private Byte normalizedAIBrakeDifference;
 
     public ForzaApi(byte[] bytes) {
-        DATA_OUT = bytes;
+        readOK = false;
+
+        if (bytes.length < PACKET_SIZE) {
+            try {
+                throw new Exception("Invalid len");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        ByteBuffer bb = ByteBuffer.wrap(bytes);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+
+        try {
+            isRaceOn = getFromBuffer(bb, int.class) == 1 ? true : false;
+            timeStampMS = getFromBuffer(bb, long.class);
+            engineMaxRpm = getFromBuffer(bb, float.class);
+            engineIdleRpm = getFromBuffer(bb, float.class);
+            currentEngineRpm = getFromBuffer(bb, float.class);
+            accelerationX = getFromBuffer(bb, float.class);
+            accelerationY = getFromBuffer(bb, float.class);
+            accelerationZ = getFromBuffer(bb, float.class);
+            velocityX = getFromBuffer(bb, float.class);
+            velocityY = getFromBuffer(bb, float.class);
+            velocityZ = getFromBuffer(bb, float.class);
+            angularVelocityX = getFromBuffer(bb, float.class);
+            angularVelocityY = getFromBuffer(bb, float.class);
+            angularVelocityZ = getFromBuffer(bb, float.class);
+            yaw = getFromBuffer(bb, float.class);
+            pitch = getFromBuffer(bb, float.class);
+            roll = getFromBuffer(bb, float.class);
+            normalizedSuspensionTravelFrontLeft = getFromBuffer(bb, float.class);
+            normalizedSuspensionTravelFrontRight = getFromBuffer(bb, float.class);
+            normalizedSuspensionTravelRearLeft = getFromBuffer(bb, float.class);
+            normalizedSuspensionTravelRearRight = getFromBuffer(bb, float.class);
+            tireSlipRatioFrontLeft = getFromBuffer(bb, float.class);
+            tireSlipRatioFrontRight = getFromBuffer(bb, float.class);
+            tireSlipRatioRearLeft = getFromBuffer(bb, float.class);
+            tireSlipRatioRearRight = getFromBuffer(bb, float.class);
+            wheelRotationSpeedFrontLeft = getFromBuffer(bb, float.class);
+            wheelRotationSpeedFrontRight = getFromBuffer(bb, float.class);
+            wheelRotationSpeedRearLeft = getFromBuffer(bb, float.class);
+            wheelRotationSpeedRearRight = getFromBuffer(bb, float.class);
+            wheelOnRumbleStripFrontLeft = getFromBuffer(bb, int.class);
+            wheelOnRumbleStripFrontRight = getFromBuffer(bb, int.class);
+            wheelOnRumbleStripRearLeft = getFromBuffer(bb, int.class);
+            wheelOnRumbleStripRearRight = getFromBuffer(bb, int.class);
+            wheelInPuddleDepthFrontLeft = getFromBuffer(bb, float.class);
+            wheelInPuddleDepthFrontRight = getFromBuffer(bb, float.class);
+            wheelInPuddleDepthRearLeft = getFromBuffer(bb, float.class);
+            wheelInPuddleDepthRearRight = getFromBuffer(bb, float.class);
+            surfaceRumbleFrontLeft = getFromBuffer(bb, float.class);
+            surfaceRumbleFrontRight = getFromBuffer(bb, float.class);
+            surfaceRumbleRearLeft = getFromBuffer(bb, float.class);
+            surfaceRumbleRearRight = getFromBuffer(bb, float.class);
+            tireSlipAngleFrontLeft = getFromBuffer(bb, float.class);
+            tireSlipAngleFrontRight = getFromBuffer(bb, float.class);
+            tireSlipAngleRearLeft = getFromBuffer(bb, float.class);
+            tireSlipAngleRearRight = getFromBuffer(bb, float.class);
+            tireCombinedSlipFrontLeft = getFromBuffer(bb, float.class);
+            tireCombinedSlipFrontRight = getFromBuffer(bb, float.class);
+            tireCombinedSlipRearLeft = getFromBuffer(bb, float.class);
+            tireCombinedSlipRearRight = getFromBuffer(bb, float.class);
+            suspensionTravelMetersFrontLeft = getFromBuffer(bb, float.class);
+            suspensionTravelMetersFrontRight = getFromBuffer(bb, float.class);
+            suspensionTravelMetersRearLeft = getFromBuffer(bb, float.class);
+            suspensionTravelMetersRearRight = getFromBuffer(bb, float.class);
+            carOrdinal = getFromBuffer(bb, int.class);
+            carClass = getFromBuffer(bb, int.class);
+            carPerformanceIndex = getFromBuffer(bb, int.class);
+            drivetrainType = getFromBuffer(bb, int.class);
+            numCylinders = getFromBuffer(bb, int.class);
+            carType = getFromBuffer(bb, int.class);
+            unknown1 = getFromBuffer(bb, byte.class);
+            unknown2 = getFromBuffer(bb, byte.class);
+            unknown3 = getFromBuffer(bb, byte.class);
+            unknown4 = getFromBuffer(bb, byte.class);
+            unknown5 = getFromBuffer(bb, byte.class);
+            unknown6 = getFromBuffer(bb, byte.class);
+            unknown7 = getFromBuffer(bb, byte.class);
+            unknown8 = getFromBuffer(bb, byte.class);
+            positionX = getFromBuffer(bb, float.class);
+            positionY = getFromBuffer(bb, float.class);
+            positionZ = getFromBuffer(bb, float.class);
+            speed = getFromBuffer(bb, float.class);
+            power = getFromBuffer(bb, float.class);
+            torque = getFromBuffer(bb, float.class);
+            tireTempFrontLeft = getFromBuffer(bb, float.class);
+            tireTempFrontRight = getFromBuffer(bb, float.class);
+            tireTempRearLeft = getFromBuffer(bb, float.class);
+            tireTempRearRight = getFromBuffer(bb, float.class);
+            boost = getFromBuffer(bb, float.class);
+            fuel = getFromBuffer(bb, float.class);
+            distanceTraveled = getFromBuffer(bb, float.class);
+            bestLap = getFromBuffer(bb, float.class);
+            lastLap = getFromBuffer(bb, float.class);
+            currentLap = getFromBuffer(bb, float.class);
+            currentRaceTime = getFromBuffer(bb, float.class);
+            lapNumber = getFromBuffer(bb, short.class);
+            racePosition = getFromBuffer(bb, byte.class);
+            accel = getFromBuffer(bb, byte.class);
+            brake = getFromBuffer(bb, byte.class);
+            clutch = getFromBuffer(bb, byte.class);
+            handbrake = getFromBuffer(bb, byte.class);
+            gear = getFromBuffer(bb, byte.class);
+            steer = getFromBuffer(bb, byte.class);
+            normalizedDrivingLine = getFromBuffer(bb, byte.class);
+            normalizedAIBrakeDifference = getFromBuffer(bb, byte.class);
+
+            readOK = bb.position() == PACKET_SIZE;
+        } catch (Exception e) {
+            try {
+                throw new Exception("Failed to parse Packet");
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    private static boolean checkBuffer(ByteBuffer buffer, int size) {
+        return buffer.hasRemaining() && buffer.remaining() >= size;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T getFromBuffer(ByteBuffer buffer, Class<T> clazz) throws Exception {
+        switch (clazz.getName()) {
+            case "int":
+                return (T) (checkBuffer(buffer, 4) ? (Object) buffer.getInt() : 0);
+            case "long":
+                return (T) (checkBuffer(buffer, 4) ? (Object) Integer.toUnsignedLong(buffer.getInt()) : 0L);
+            case "byte":
+                return (T) (checkBuffer(buffer, 1) ? (Object) buffer.get() : 0);
+            case "float":
+                return (T) (checkBuffer(buffer, 4) ? (Object) buffer.getFloat() : 0f);
+            case "short":
+                return (T) (checkBuffer(buffer, 2) ? (Object) buffer.getShort() : 0);
+        }
+        throw new Exception("Invalid Type");
     }
 
     public boolean getIsRaceOn() {
-        boolean isRaceOn = false;
-        if (getBytes(DATA_OUT, 0, 4).getInt() == 0) isRaceOn = false;
-        if (getBytes(DATA_OUT, 0, 4).getInt() == 1) isRaceOn = true;
         return isRaceOn;
     }
 
-    public int getTimeStampMS() {
-        return getBytes(DATA_OUT, 4, 8).getInt();
+    public Long getTimeStampMS() {
+        return timeStampMS;
     }
 
-    //ENGINE RPM//
-    public float getEngineMaxRPM() {
-        return getBytes(DATA_OUT, 8, 12).getFloat();
+    public float getEngineMaxRpm() {
+        return engineMaxRpm;
     }
 
-    public float getEngineIdleRPM() {
-        return getBytes(DATA_OUT, 12, 16).getFloat();
+    public Float getEngineIdleRpm() {
+        return engineIdleRpm;
     }
 
-    public float getEngineCurrentRPM() {
-        return getBytes(DATA_OUT, 16, 20).getFloat();
+    public float getCurrentEngineRpm() {
+        return currentEngineRpm;
     }
 
-    //ACCELERATION AXIS//
-    public float getAccelerationX() {
-        return getBytes(DATA_OUT, 20, 24).getFloat();
+    public Float getAccelerationX() {
+        return accelerationX;
     }
 
-    public float getAccelerationY() {
-        return getBytes(DATA_OUT, 24, 28).getFloat();
+    public Float getAccelerationY() {
+        return accelerationY;
     }
 
-    public float getAccelerationZ() {
-        return getBytes(DATA_OUT, 28, 32).getFloat();
+    public Float getAccelerationZ() {
+        return accelerationZ;
     }
 
-    //VELOCITY AXIS//
-    public float getVelocityX() {
-        return getBytes(DATA_OUT, 32, 36).getFloat();
+    public Float getVelocityX() {
+        return velocityX;
     }
 
-    public float getVelocityY() {
-        return getBytes(DATA_OUT, 36, 40).getFloat();
+    public Float getVelocityY() {
+        return velocityY;
     }
 
-    public float getVelocityZ() {
-        return getBytes(DATA_OUT, 40, 44).getFloat();
+    public Float getVelocityZ() {
+        return velocityZ;
     }
 
-    //ANGULAR VELOCITY AXIS//
-    public float getAngularVelocityX() {
-        return getBytes(DATA_OUT, 44, 48).getFloat();
+    public Float getAngularVelocityX() {
+        return angularVelocityX;
     }
 
-    public float getAngularVelocityY() {
-        return getBytes(DATA_OUT, 48, 52).getFloat();
+    public Float getAngularVelocityY() {
+        return angularVelocityY;
     }
 
-    public float getAngularVelocityZ() {
-        return getBytes(DATA_OUT, 52, 56).getFloat();
+    public Float getAngularVelocityZ() {
+        return angularVelocityZ;
     }
 
-    //ROTATION//
-    public float getYaw() {
-        return getBytes(DATA_OUT, 56, 60).getFloat();
+    public Float getYaw() {
+        return yaw;
     }
 
-    public float getPitch() {
-        return getBytes(DATA_OUT, 60, 64).getFloat();
+    public Float getPitch() {
+        return pitch;
     }
 
-    public float getRoll() {
-        return getBytes(DATA_OUT, 64, 68).getFloat();
+    public Float getRoll() {
+        return roll;
     }
 
-    //NORMALIZED SUSPENSION TRAVEL//
-    public float getNormalizedSuspensionTravelFrontLeft() {
-        return getBytes(DATA_OUT, 68, 72).getFloat();
+    public Float getNormalizedSuspensionTravelFrontLeft() {
+        return normalizedSuspensionTravelFrontLeft;
     }
 
-    public float getNormalizedSuspensionTravelFrontRight() {
-        return getBytes(DATA_OUT, 72, 76).getFloat();
+    public Float getNormalizedSuspensionTravelFrontRight() {
+        return normalizedSuspensionTravelFrontRight;
     }
 
-    public float getNormalizedSuspensionTravelRearLeft() {
-        return getBytes(DATA_OUT, 76, 80).getFloat();
+    public Float getNormalizedSuspensionTravelRearLeft() {
+        return normalizedSuspensionTravelRearLeft;
     }
 
-    public float getNormalizedSuspensionTravelRearRight() {
-        return getBytes(DATA_OUT, 80, 84).getFloat();
+    public Float getNormalizedSuspensionTravelRearRight() {
+        return normalizedSuspensionTravelRearRight;
     }
 
-    //TIRE SLIP RATIO FRONT LEFT//
-    public float getTireSlipRatioFrontLeft() {
-        return getBytes(DATA_OUT, 84, 88).getFloat();
+    public Float getTireSlipRatioFrontLeft() {
+        return tireSlipRatioFrontLeft;
     }
 
-    public float getTireSlipRatioFrontRight() {
-        return getBytes(DATA_OUT, 88, 92).getFloat();
+    public Float getTireSlipRatioFrontRight() {
+        return tireSlipRatioFrontRight;
     }
 
-    public float getTireSlipRatioRearLeft() {
-        return getBytes(DATA_OUT, 92, 96).getFloat();
+    public Float getTireSlipRatioRearLeft() {
+        return tireSlipRatioRearLeft;
     }
 
-    public float getTireSlipRatioRearRight() {
-        return getBytes(DATA_OUT, 96, 100).getFloat();
+    public Float getTireSlipRatioRearRight() {
+        return tireSlipRatioRearRight;
     }
 
-    //WHEEL ROTATION SPEED//
-    public float getWheelRotationSpeedFrontLeft() {
-        return getBytes(DATA_OUT, 100, 104).getFloat();
+    public Float getWheelRotationSpeedFrontLeft() {
+        return wheelRotationSpeedFrontLeft;
     }
 
-    public float getWheelRotationSpeedFrontRight() {
-        return getBytes(DATA_OUT, 104, 108).getFloat();
+    public Float getWheelRotationSpeedFrontRight() {
+        return wheelRotationSpeedFrontRight;
     }
 
-    public float getWheelRotationSpeedRearLeft() {
-        return getBytes(DATA_OUT, 108, 112).getFloat();
+    public Float getWheelRotationSpeedRearLeft() {
+        return wheelRotationSpeedRearLeft;
     }
 
-    public float getWheelRotationSpeedRearRight() {
-        return getBytes(DATA_OUT, 112, 116).getFloat();
+    public Float getWheelRotationSpeedRearRight() {
+        return wheelRotationSpeedRearRight;
     }
 
-    //WHEEL ON RUMBLE STRIP SPEED//
-    public int getWheelOnRumbleStripFrontLeft() {
-        return getBytes(DATA_OUT, 116, 120).getInt();
+    public Integer getWheelOnRumbleStripFrontLeft() {
+        return wheelOnRumbleStripFrontLeft;
     }
 
-    public int getWheelOnRumbleStripFrontRight() {
-        return getBytes(DATA_OUT, 120, 124).getInt();
+    public Integer getWheelOnRumbleStripFrontRight() {
+        return wheelOnRumbleStripFrontRight;
     }
 
-    public int getWheelOnRumbleStripRearLeft() {
-        return getBytes(DATA_OUT, 124, 128).getInt();
+    public Integer getWheelOnRumbleStripRearLeft() {
+        return wheelOnRumbleStripRearLeft;
     }
 
-    public int getWheelOnRumbleStripRearRight() {
-        return getBytes(DATA_OUT, 128, 132).getInt();
+    public Integer getWheelOnRumbleStripRearRight() {
+        return wheelOnRumbleStripRearRight;
     }
 
-    //WHEEL IN PUDDLE DEPTH//
-    public float getWheelInPuddleDepthFrontLeft() {
-        return getBytes(DATA_OUT, 132, 136).getFloat();
+    public Float getWheelInPuddleDepthFrontLeft() {
+        return wheelInPuddleDepthFrontLeft;
     }
 
-    public float getWheelInPuddleDepthFrontRight() {
-        return getBytes(DATA_OUT, 136, 140).getFloat();
+    public Float getWheelInPuddleDepthFrontRight() {
+        return wheelInPuddleDepthFrontRight;
     }
 
-    public float getWheelInPuddleDepthRearLeft() {
-        return getBytes(DATA_OUT, 140, 144).getFloat();
+    public Float getWheelInPuddleDepthRearLeft() {
+        return wheelInPuddleDepthRearLeft;
     }
 
-    public float getWheelInPuddleDepthRearRight() {
-        return getBytes(DATA_OUT, 144, 148).getFloat();
+    public Float getWheelInPuddleDepthRearRight() {
+        return wheelInPuddleDepthRearRight;
     }
 
-    //SURFACE RUMBLE//
-    public float getSurfaceRumbleFrontLeft() {
-        return getBytes(DATA_OUT, 148, 152).getFloat();
+    public Float getSurfaceRumbleFrontLeft() {
+        return surfaceRumbleFrontLeft;
     }
 
-    public float getSurfaceRumbleFrontRight() {
-        return getBytes(DATA_OUT, 152, 156).getFloat();
+    public Float getSurfaceRumbleFrontRight() {
+        return surfaceRumbleFrontRight;
     }
 
-    public float getSurfaceRumbleRearLeft() {
-        return getBytes(DATA_OUT, 156, 160).getFloat();
+    public Float getSurfaceRumbleRearLeft() {
+        return surfaceRumbleRearLeft;
     }
 
-    public float getSurfaceRumbleRearRight() {
-        return getBytes(DATA_OUT, 160, 164).getFloat();
+    public Float getSurfaceRumbleRearRight() {
+        return surfaceRumbleRearRight;
     }
 
-    //TIRE SLIP ANGLE//
-    public float getTireSlipAngleFrontLeft() {
-        return getBytes(DATA_OUT, 164, 168).getFloat();
+    public Float getTireSlipAngleFrontLeft() {
+        return tireSlipAngleFrontLeft;
     }
 
-    public float getTireSlipAngleFrontRight() {
-        return getBytes(DATA_OUT, 168, 172).getFloat();
+    public Float getTireSlipAngleFrontRight() {
+        return tireSlipAngleFrontRight;
     }
 
-    public float getTireSlipAngleRearLeft() {
-        return getBytes(DATA_OUT, 172, 176).getFloat();
+    public Float getTireSlipAngleRearLeft() {
+        return tireSlipAngleRearLeft;
     }
 
-    public float getTireSlipAngleRearRight() {
-        return getBytes(DATA_OUT, 176, 180).getFloat();
+    public Float getTireSlipAngleRearRight() {
+        return tireSlipAngleRearRight;
     }
 
-    //TIRE COMBINED SLIP//
-    public float getTireCombinedSlipFrontLeft() {
-        return getBytes(DATA_OUT, 180, 184).getFloat();
+    public Float getTireCombinedSlipFrontLeft() {
+        return tireCombinedSlipFrontLeft;
     }
 
-    public float getTireCombinedSlipFrontRight() {
-        return getBytes(DATA_OUT, 184, 188).getFloat();
+    public Float getTireCombinedSlipFrontRight() {
+        return tireCombinedSlipFrontRight;
     }
 
-    public float getTireCombinedSlipRearLeft() {
-        return getBytes(DATA_OUT, 188, 192).getFloat();
+    public Float getTireCombinedSlipRearLeft() {
+        return tireCombinedSlipRearLeft;
     }
 
-    public float getTireCombinedSlipRearRight() {
-        return getBytes(DATA_OUT, 192, 196).getFloat();
+    public Float getTireCombinedSlipRearRight() {
+        return tireCombinedSlipRearRight;
     }
 
-    //SUSPENSION TRAVEL METERS//
-    public float getSuspensionTravelMetersFrontLeft() {
-        return getBytes(DATA_OUT, 196, 200).getFloat();
+    public Float getSuspensionTravelMetersFrontLeft() {
+        return suspensionTravelMetersFrontLeft;
     }
 
-    public float getSuspensionTravelMetersFrontRight() {
-        return getBytes(DATA_OUT, 200, 204).getFloat();
+    public Float getSuspensionTravelMetersFrontRight() {
+        return suspensionTravelMetersFrontRight;
     }
 
-    public float getSuspensionTravelMetersRearLeft() {
-        return getBytes(DATA_OUT, 204, 208).getFloat();
+    public Float getSuspensionTravelMetersRearLeft() {
+        return suspensionTravelMetersRearLeft;
     }
 
-    public float getSuspensionTravelMetersRearRight() {
-        return getBytes(DATA_OUT, 208, 212).getFloat();
+    public Float getSuspensionTravelMetersRearRight() {
+        return suspensionTravelMetersRearRight;
     }
 
-    //VEHICLE STATS//
-    public int getCarOrdinal() {
-        return getBytes(DATA_OUT, 212, 216).getInt();
+    public String getCarClass() {
+        switch (carClass) {
+            case 0:
+                return "D";
+            case 1:
+                return "C";
+            case 2:
+                return "B";
+            case 3:
+                return "A";
+            case 4:
+                return "S1";
+            case 5:
+                return "S2";
+            case 6:
+                return "X";
+        }
+        return "-";
     }
 
-    public int getCarClass() {
-        return getBytes(DATA_OUT, 216, 220).getInt();
+    public Integer getCarPerformanceIndex() {
+        return carPerformanceIndex;
     }
 
-    public int getCarPerformanceIndex() {
-        return getBytes(DATA_OUT, 220, 224).getInt();
+    public String getDrivetrain() {
+        switch(drivetrainType){
+            case 0:
+                return "FWD";
+            case 1:
+                return "RWD";
+            case 2:
+                return "AWD";
+            default:
+                return "-";
+        }
     }
 
-    public int getDriveTrain() {
-        return getBytes(DATA_OUT, 224, 228).getInt();
+    public Integer getNumCylinders() {
+        return numCylinders;
     }
 
-    public int getNumberOfCylinders() {
-        return getBytes(DATA_OUT, 228, 232).getInt();
+    public String getCarType() {
+        switch (carType) {
+            case 11:
+                return "Modern Super Cars";
+            case 12:
+                return "Retro Super Cars";
+            case 13:
+                return "Hyper Cars";
+            case 14:
+                return "Retro Saloons";
+            case 16:
+                return "Vans & Utility";
+            case 17:
+                return "Retro Sports Cars";
+            case 18:
+                return "Modern Sports Cars";
+            case 19:
+                return "Super Saloons";
+            case 20:
+                return "Classic Racers";
+            case 21:
+                return "Cult Cars";
+            case 22:
+                return "Rare Classics";
+            case 25:
+                return "Super Hot Hatch";
+            case 29:
+                return "Rods & Customs";
+            case 30:
+                return "Retro Muscle";
+            case 31:
+                return "Modern Muscle";
+            case 32:
+                return "Retro Rally";
+            case 33:
+                return "Classic Rally";
+            case 34:
+                return "Rally Monsters";
+            case 35:
+                return "Modern Rally";
+            case 36:
+                return "GT Cars";
+            case 37:
+                return "Super GT";
+            case 38:
+                return "Extreme Offroad";
+            case 39:
+                return "Sports Utility Heroes";
+            case 40:
+                return "Offroad";
+            case 41:
+                return "Offroad Buggies";
+            case 42:
+                return "Classic Sports Cars";
+            case 43:
+                return "Track Toys";
+            case 44:
+                return "Vintage Racers";
+            case 45:
+                return "Trucks";
+            default:
+                return "Unknown (" + carType + ")";
+        }
     }
 
-    public int getCarCategory() {
-        return getBytes(DATA_OUT, 232, 236).getInt();
+    public Byte getUnknown1() {
+        return unknown1;
     }
 
-    public int getUnknown1() {
-        return getBytes(DATA_OUT, 236, 240).getInt();
+    public Byte getUnknown2() {
+        return unknown2;
     }
 
-    public int getUnknown2() {
-        return getBytes(DATA_OUT, 240, 244).getInt();
+    public Byte getUnknown3() {
+        return unknown3;
     }
 
-    //POSITION AXIS//
-    public float getPositionX() {
-        return getBytes(DATA_OUT, 244, 248).getFloat();
+    public Byte getUnknown4() {
+        return unknown4;
     }
 
-    public float getPositionY() {
-        return getBytes(DATA_OUT, 248, 252).getFloat();
+    public Byte getUnknown5() {
+        return unknown5;
     }
 
-    public float getPositionZ() {
-        return getBytes(DATA_OUT, 252, 256).getFloat();
+    public Byte getUnknown6() {
+        return unknown6;
     }
 
-    //VEHICLE ENGINE STATS//
-    public float getSpeed() {
-        return getBytes(DATA_OUT, 256, 260).getFloat();
+    public Byte getUnknown7() {
+        return unknown7;
     }
 
-    public float getPower() {
-        return getBytes(DATA_OUT, 260, 264).getFloat();
+    public Byte getUnknown8() {
+        return unknown8;
     }
 
-    public float getTorque() {
-        return getBytes(DATA_OUT, 264, 268).getFloat();
+    public Integer getCarOrdinal() {
+        return carOrdinal;
     }
 
-    //TIRE TEMP//
-    public float getTireTempFrontLeft() {
-        return getBytes(DATA_OUT, 268, 272).getFloat();
+    public Float getPositionX() {
+        return positionX;
     }
 
-    public float getTireTempFrontRight() {
-        return getBytes(DATA_OUT, 272, 276).getFloat();
+    public Float getPositionY() {
+        return positionY;
     }
 
-    public float getTireTempRearLeft() {
-        return getBytes(DATA_OUT, 276, 280).getFloat();
+    public Float getPositionZ() {
+        return positionZ;
     }
 
-    public float getTireTempRearRight() {
-        return getBytes(DATA_OUT, 280, 284).getFloat();
+    public Float getSpeedMPS() {
+        return speed;
     }
 
-    //RACE STATS//
-    public float getBoost() {
-        return getBytes(DATA_OUT, 284, 290).getFloat();
+    public int getSpeedKPH() {
+        return Math.round(getSpeedMPS() * 3.6f);
     }
 
-    public float getFuel() {
-        return getBytes(DATA_OUT, 290, 294).getFloat();
+    public int getSpeedMPH() {
+        return Math.round(getSpeedMPS() * 2.23694f);
     }
 
-    public float getDistanceTraveled() {
-        return getBytes(DATA_OUT, 294, 300).getFloat();
+    public Float getPower() {
+        return power;
     }
 
-    public float getBestLap() {
-        return getBytes(DATA_OUT, 300, 304).getFloat();
+    // Watts > HP
+    public Float getHorsePower() {
+        return getPower() * 0.00134102f;
     }
 
-    public float getLastLap() {
-        return getBytes(DATA_OUT, 304, 308).getFloat();
+    public Float getTorque() {
+        return torque;
     }
 
-    public float getCurrentLap() {
-        return getBytes(DATA_OUT, 308, 312).getFloat();
+    public Float getTireTempFrontLeft() {
+        return tireTempFrontLeft;
     }
 
-    //Thank you PinkiePie for fixing
-    public short getLapNumber() {
-        return (short) ((getBytes(DATA_OUT, 313, 314).get() << 8) |
-			(getBytes(DATA_OUT, 312, 313).get() & 0xFF));
+    public Float getTireTempFrontRight() {
+        return tireTempFrontRight;
     }
 
-    public byte getRacePosition() {
-        return getBytes(DATA_OUT, 314, 315).get();
+    public Float getTireTempRearLeft() {
+        return tireTempRearLeft;
     }
 
-    public byte getAccel() {
-        return (byte) (getBytes(DATA_OUT, 315, 316).get() & 0xFF);
+    public Float getTireTempRearRight() {
+        return tireTempRearRight;
     }
 
-    public byte getBrake() {
-        return (byte) (getBytes(DATA_OUT, 316, 317).get() & 0xFF);
+    public Float getBoost() {
+        return boost;
     }
 
-    public byte getClutch() {
-        return (byte) (getBytes(DATA_OUT, 317, 318).get() & 0xFF);
+    public Float getFuel() {
+        return fuel;
     }
 
-    public byte getHandbrake() {
-        return (byte) (getBytes(DATA_OUT, 318, 319).get() & 0xFF);
+    public Float getDistanceTraveled() {
+        return distanceTraveled;
     }
 
-    public byte getGear() {
-        return (byte) (getBytes(DATA_OUT, 319, 320).get() & 0xFF);
+    public Float getBestLap() {
+        return bestLap;
     }
 
-    public byte getSteer() {
-        return (byte) (getBytes(DATA_OUT, 320, 321).get() & 0xFF);
+    public Float getLastLap() {
+        return lastLap;
     }
 
-    //MISC//
-    //Thank you PinkiePie for fixing
-    public byte getNormalizedDrivingLine() {
-        return (byte) (getBytes(DATA_OUT, 321, 322).get() & 0xFF);
+    public Float getCurrentLap() {
+        return currentLap;
     }
 
-    public byte getNormalizedAIBrakeDifference() {
-        return (byte) (getBytes(DATA_OUT, 322, 323).get() & 0xFF);
+    public Float getCurrentRaceTime() {
+        return currentRaceTime;
     }
 
-    public float getVelocity() {
+    public Short getLapNumber() {
+        return lapNumber;
+    }
+
+    public Byte getRacePosition() {
+        return racePosition;
+    }
+
+    public Byte getAccel() {
+        return accel;
+    }
+
+    public Byte getBrake() {
+        return brake;
+    }
+
+    public Byte getClutch() {
+        return clutch;
+    }
+
+    public Byte getHandbrake() {
+        return handbrake;
+    }
+
+    public Byte getGear() {
+        return gear;
+    }
+
+    public Byte getSteer() {
+        return steer;
+    }
+
+    public Byte getNormalizedDrivingLine() {
+        return normalizedDrivingLine;
+    }
+
+    public Byte getNormalizedAIBrakeDifference() {
+        return normalizedAIBrakeDifference;
+    }
+
+
+    public boolean ReadOK() {
+        return readOK;
+    }
+
+    public float getAverageVelocity() {
         return getVector3DLength(getVelocityX(), getVelocityY(), getVelocityZ());
     }
 
@@ -411,8 +742,8 @@ public class ForzaApi {
 
     public float getTireTempAverageLeft() {
         return getAverage(
-			getTireTempFrontLeft(),
-			getTireTempRearLeft()
+                getTireTempFrontLeft(),
+                getTireTempRearLeft()
         );
     }
 
@@ -422,10 +753,10 @@ public class ForzaApi {
 
     public float getTireTempAverageTotal() {
         return getAverage(
-			getTireTempFrontLeft(),
-			getTireTempFrontRight(),
-			getTireTempRearLeft(),
-			getTireTempRearRight()
+                getTireTempFrontLeft(),
+                getTireTempFrontRight(),
+                getTireTempRearLeft(),
+                getTireTempRearRight()
         );
     }
 
@@ -437,7 +768,107 @@ public class ForzaApi {
         return (float) Math.sqrt(x * x + y * y + z * z);
     }
 
-    private ByteBuffer getBytes(byte[] array, int a, int b) {
-        return ByteBuffer.wrap(Arrays.copyOfRange(array, a, b)).order(ByteOrder.LITTLE_ENDIAN);
+    @Override
+    public String toString() {
+        return "{" +
+                " isRaceOn='" + getIsRaceOn() + "'" +
+                ", timeStampMS='" + getTimeStampMS() + "'" +
+                ", engineMaxRpm='" + getEngineMaxRpm() + "'" +
+                ", engineIdleRpm='" + getEngineIdleRpm() + "'" +
+                ", currentEngineRpm='" + getCurrentEngineRpm() + "'" +
+                ", accelerationX='" + getAccelerationX() + "'" +
+                ", accelerationY='" + getAccelerationY() + "'" +
+                ", accelerationZ='" + getAccelerationZ() + "'" +
+                ", velocityX='" + getVelocityX() + "'" +
+                ", velocityY='" + getVelocityY() + "'" +
+                ", velocityZ='" + getVelocityZ() + "'" +
+                ", averageVelocityZ='" + getAverageVelocity() + "'" +
+                ", angularVelocityX='" + getAngularVelocityX() + "'" +
+                ", angularVelocityY='" + getAngularVelocityY() + "'" +
+                ", angularVelocityZ='" + getAngularVelocityZ() + "'" +
+                ", yaw='" + getYaw() + "'" +
+                ", pitch='" + getPitch() + "'" +
+                ", roll='" + getRoll() + "'" +
+                ", normalizedSuspensionTravelFrontLeft='" + getNormalizedSuspensionTravelFrontLeft() + "'" +
+                ", normalizedSuspensionTravelFrontRight='" + getNormalizedSuspensionTravelFrontRight() + "'" +
+                ", normalizedSuspensionTravelRearLeft='" + getNormalizedSuspensionTravelRearLeft() + "'" +
+                ", normalizedSuspensionTravelRearRight='" + getNormalizedSuspensionTravelRearRight() + "'" +
+                ", tireSlipRatioFrontLeft='" + getTireSlipRatioFrontLeft() + "'" +
+                ", tireSlipRatioFrontRight='" + getTireSlipRatioFrontRight() + "'" +
+                ", tireSlipRatioRearLeft='" + getTireSlipRatioRearLeft() + "'" +
+                ", tireSlipRatioRearRight='" + getTireSlipRatioRearRight() + "'" +
+                ", wheelRotationSpeedFrontLeft='" + getWheelRotationSpeedFrontLeft() + "'" +
+                ", wheelRotationSpeedFrontRight='" + getWheelRotationSpeedFrontRight() + "'" +
+                ", wheelRotationSpeedRearLeft='" + getWheelRotationSpeedRearLeft() + "'" +
+                ", wheelRotationSpeedRearRight='" + getWheelRotationSpeedRearRight() + "'" +
+                ", wheelOnRumbleStripFrontLeft='" + getWheelOnRumbleStripFrontLeft() + "'" +
+                ", wheelOnRumbleStripFrontRight='" + getWheelOnRumbleStripFrontRight() + "'" +
+                ", wheelOnRumbleStripRearLeft='" + getWheelOnRumbleStripRearLeft() + "'" +
+                ", wheelOnRumbleStripRearRight='" + getWheelOnRumbleStripRearRight() + "'" +
+                ", wheelInPuddleDepthFrontLeft='" + getWheelInPuddleDepthFrontLeft() + "'" +
+                ", wheelInPuddleDepthFrontRight='" + getWheelInPuddleDepthFrontRight() + "'" +
+                ", wheelInPuddleDepthRearLeft='" + getWheelInPuddleDepthRearLeft() + "'" +
+                ", wheelInPuddleDepthRearRight='" + getWheelInPuddleDepthRearRight() + "'" +
+                ", surfaceRumbleFrontLeft='" + getSurfaceRumbleFrontLeft() + "'" +
+                ", surfaceRumbleFrontRight='" + getSurfaceRumbleFrontRight() + "'" +
+                ", surfaceRumbleRearLeft='" + getSurfaceRumbleRearLeft() + "'" +
+                ", surfaceRumbleRearRight='" + getSurfaceRumbleRearRight() + "'" +
+                ", tireSlipAngleFrontLeft='" + getTireSlipAngleFrontLeft() + "'" +
+                ", tireSlipAngleFrontRight='" + getTireSlipAngleFrontRight() + "'" +
+                ", tireSlipAngleRearLeft='" + getTireSlipAngleRearLeft() + "'" +
+                ", tireSlipAngleRearRight='" + getTireSlipAngleRearRight() + "'" +
+                ", tireCombinedSlipFrontLeft='" + getTireCombinedSlipFrontLeft() + "'" +
+                ", tireCombinedSlipFrontRight='" + getTireCombinedSlipFrontRight() + "'" +
+                ", tireCombinedSlipRearLeft='" + getTireCombinedSlipRearLeft() + "'" +
+                ", tireCombinedSlipRearRight='" + getTireCombinedSlipRearRight() + "'" +
+                ", suspensionTravelMetersFrontLeft='" + getSuspensionTravelMetersFrontLeft() + "'" +
+                ", suspensionTravelMetersFrontRight='" + getSuspensionTravelMetersFrontRight() + "'" +
+                ", suspensionTravelMetersRearLeft='" + getSuspensionTravelMetersRearLeft() + "'" +
+                ", suspensionTravelMetersRearRight='" + getSuspensionTravelMetersRearRight() + "'" +
+                ", carClass='" + getCarClass() + "'" +
+                ", carPerformanceIndex='" + getCarPerformanceIndex() + "'" +
+                ", drivetrainType='" + getDrivetrain() + "'" +
+                ", numCylinders='" + getNumCylinders() + "'" +
+                ", carType='" + getCarType() + "'" +
+                ", unknown1='" + getUnknown1() + "'" +
+                ", unknown2='" + getUnknown2() + "'" +
+                ", unknown3='" + getUnknown3() + "'" +
+                ", unknown4='" + getUnknown4() + "'" +
+                ", unknown5='" + getUnknown5() + "'" +
+                ", unknown6='" + getUnknown6() + "'" +
+                ", unknown7='" + getUnknown7() + "'" +
+                ", unknown8='" + getUnknown8() + "'" +
+                ", carOrdinal='" + getCarOrdinal() + "'" +
+                ", positionX='" + getPositionX() + "'" +
+                ", positionY='" + getPositionY() + "'" +
+                ", positionZ='" + getPositionZ() + "'" +
+                ", speedMPS='" + getSpeedMPS() + "'" +
+                ", speedMPH='" + getSpeedMPH() + "'" +
+                ", speedKPH='" + getSpeedKPH() + "'" +
+                ", power='" + getPower() + "'" +
+                ", horsepower='" + getHorsePower() + "'" +
+                ", torque='" + getTorque() + "'" +
+                ", tireTempFrontLeft='" + getTireTempFrontLeft() + "'" +
+                ", tireTempFrontRight='" + getTireTempFrontRight() + "'" +
+                ", tireTempRearLeft='" + getTireTempRearLeft() + "'" +
+                ", tireTempRearRight='" + getTireTempRearRight() + "'" +
+                ", boost='" + getBoost() + "'" +
+                ", fuel='" + getFuel() + "'" +
+                ", distanceTraveled='" + getDistanceTraveled() + "'" +
+                ", bestLap='" + getBestLap() + "'" +
+                ", lastLap='" + getLastLap() + "'" +
+                ", currentLap='" + getCurrentLap() + "'" +
+                ", currentRaceTime='" + getCurrentRaceTime() + "'" +
+                ", lapNumber='" + getLapNumber() + "'" +
+                ", racePosition='" + getRacePosition() + "'" +
+                ", accel='" + getAccel() + "'" +
+                ", brake='" + getBrake() + "'" +
+                ", clutch='" + getClutch() + "'" +
+                ", handbrake='" + getHandbrake() + "'" +
+                ", gear='" + getGear() + "'" +
+                ", steer='" + getSteer() + "'" +
+                ", normalizedDrivingLine='" + getNormalizedDrivingLine() + "'" +
+                ", normalizedAIBrakeDifference='" + getNormalizedAIBrakeDifference() + "'" +
+                "}";
     }
 }
