@@ -1,5 +1,3 @@
-package org.example;
-
 import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
@@ -8,44 +6,54 @@ import java.util.Arrays;
 
 public class ExampleFile {
     public static void main(String[] args) {
-            ForzaApi api;  //ForzaApi class, UDP data is streamed and parsed here eventually
-
-            int UDP_PORT = 5300;  //This can be any port you want, just be sure to set it in your game settings
-
-            DatagramSocket ds = null;  //Initialize UDP stream socket
+        int UDP_PORT = 5300;
+        ForzaApi;
+        
+        //Start socket on given port
+        DatagramSocket = null;
             try {
-                ds = new DatagramSocket(UDP_PORT);
-            } catch (SocketException e) {
-                e.printStackTrace();
+                datagramSocket = new DatagramSocket(UDP_PORT);
+            } catch (Exception e) {
+               e.printStackTrace();
             }
 
-            byte[] receive = new byte[323];  //Create packet buffer size, which in this case is 312
-
-            DatagramPacket dp;
-
-            while (true) {  //This will loop and receive data realtime
-
-                dp = new DatagramPacket(receive, receive.length); //Pass bytes and packet size
-
+            //Only 323 bytes are received from the Forza UDP stream
+            byte[] receive = new byte[323];
+            boolean isConnected = false;
+        
+        //Begin data loop
+            while (true) {
+                datagramPacket = new DatagramPacket(receive, receive.length);
                 try {
-                    ds.receive(dp); //receive UDP data stream and pass it to DatagramPacket
-                } catch (IOException e) {
+                    assert datagramSocket != null;
+                    datagramSocket.receive(datagramPacket);
+
+                    //Check if data has been recieved by checking timestamp
+                    if (!isConnected) {
+                        ForzaApi tempApi = new ForzaApi(datagramPacket.getData());
+                        if (tempApi.getTimeStampMS() != 0) {
+                            
+                            //Put logic for when data is is first received
+                            
+                            isConnected = true;
+                        }
+                    }
+                } catch (Exception e) {
+                   e.printStackStrace();
+                }
+
+                //Send data to the ForzaApi parsing class
+                try {
+                    forzaApi = new ForzaApi(datagramPacket.getData());
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                String ALL_DATA = Arrays.toString(dp.getData()); //Full byte string parsed into a string array, good for debugging
-
-                api = new ForzaApi(dp.getData()); //Initialize ForzaApi and pass stream data to be parsed
-
-
             /*
-            These are all the available telemetry data functions
-            and what type they return.
-            I'm not sure about the telemetry data structures for any other
-            games besides FORZA HORIZON 4 and FORZA HORIZON 5. Maybe I'll make one
-            some day, but it's kinda irrelevant at this point.
+            * These are all the available telemetry data methods and what they return 
+            * Not all methods are listed, be sure to check ForzaApi.java to see what is available.
+            * Calculated methods do not change performance, data is received at 30FPS by default.
             */
-
 
                 boolean isRaceOn = api.getIsRaceOn();
                 float timestamp = api.getTimeStampMS();
@@ -122,6 +130,8 @@ public class ExampleFile {
                 String driveTrain = api.getDrivetrain();
                 int numberOfCylinders = api.getNumCylinders();
 
+                Long objectHit = api.getObjectHit();
+                
                 float positionX = api.getPositionX();
                 float positionY = api.getPositionY();
                 float positionZ = api.getPositionZ();
