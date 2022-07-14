@@ -1,6 +1,7 @@
 package root.forza.telemetry;
 
 import java.net.*;
+import java.util.Arrays;
 
 public interface ForzaInterface {
          default Thread startConnection(int port) {
@@ -9,7 +10,6 @@ public interface ForzaInterface {
                      //Only 323 bytes are received from the Forza UDP stream
                      byte[] receive = new byte[323];
                      DatagramPacket datagramPacket = new DatagramPacket(receive, receive.length);
-
                      int lastOrdinal = 0;
                      boolean isPaused = false, isConnected = false;
                      while (true) {
@@ -19,6 +19,8 @@ public interface ForzaInterface {
                                  ForzaTelemetryApi tempApi = new ForzaTelemetryApi(datagramPacket.getData());
                                  if (tempApi.getTimeStampMS() != 0) {
                                      lastOrdinal = tempApi.getOrdinal();
+                                     //Set ForzaApi to null if game is paused, as all values will return 0
+                                     if(!tempApi.getIsRaceOn()) tempApi = null;
                                      //Call onConnected when first data stream is received
                                      onConnected(tempApi, datagramPacket);
                                      isConnected = true;
@@ -27,11 +29,10 @@ public interface ForzaInterface {
                          } catch (Exception e) {
                              e.printStackTrace();
                          }
-
                          //Send data to the ForzaApi parsing class
                          try {
-                             ForzaTelemetryApi api = new ForzaTelemetryApi(datagramPacket.getData());
-
+                             byte[] data = datagramPacket.getData();
+                             ForzaTelemetryApi api = new ForzaTelemetryApi(data);
                              //Call onGamePaused when isRaceOn is false, call onGameUnpaused when true while game is paused
                              if(!api.getIsRaceOn() && !isPaused){
                                  onGamePaused();
@@ -40,41 +41,27 @@ public interface ForzaInterface {
                                  onGameUnpaused();
                                  isPaused = false;
                              }
-
                              //Call onCarChanged when ordinal changes
                              if(api.getOrdinal() != lastOrdinal && !isPaused) {
                                  onCarChanged(api, new VehicleData(api));
                                  lastOrdinal = api.getOrdinal();
                              }
-
-                             //Call onDisconnected when stream is empty
-                             if(api.getOrdinal() == 0 && !isPaused) {
-                                 onDisconnected(datagramPacket);
-                             }
                              //Send datastream every single loop unless game is paused
                              if(!isPaused) onDataReceived(api);
+
                          } catch (Exception e) {
                              e.printStackTrace();
                          }
-
                      }
                  } catch (SocketException e) {
                      throw new RuntimeException(e);
                  }
              });
          }
-
-         static String getDeviceIp() throws UnknownHostException {
-             return InetAddress.getLocalHost().getHostAddress();
-         }
+         static String getDeviceIp() throws UnknownHostException { return InetAddress.getLocalHost().getHostAddress(); }
          void onDataReceived(ForzaTelemetryApi api);
          void onConnected(ForzaTelemetryApi api, DatagramPacket packet);
-
-         void onDisconnected(DatagramPacket packet);
          void onGamePaused();
-
          void onGameUnpaused();
-
          void onCarChanged(ForzaTelemetryApi api, VehicleData data);
-
 }
