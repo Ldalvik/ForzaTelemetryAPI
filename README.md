@@ -2,7 +2,7 @@
 Forza DATA OUT telemetry API. Used to pull data from in-game using its built in telemetry system.
 
 ## HOW TO USE
-### This is tutprial is for the ForzaTelemetryAPI JAVA 17+ non-android release. Please refer to the android version if you need to use a lower Java version.
+### This is tutorial is for the ForzaTelemetryAPI JAVA 17+ non-android release. Please refer to the android version if you need to use a lower Java version.
 
 To begin using the ForzaTelemetryApi, download the 4 required files, ```ForzaTelemetryApi.java```, ```ForzaTelemetryBuilder.java```, and ```ForzaInterface.java```
 
