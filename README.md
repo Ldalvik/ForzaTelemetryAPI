@@ -97,7 +97,7 @@ When you pause and unpause the game, the ```onGamePaused()``` and ```onGameUnpau
     }
 ```
 
-And lastly, ```onCarChanged()``` is called when you change vehicles. This returns an extra class called ```VehicleData``` which holds on the static values of your car.
+And lastly, ```onCarChanged()``` is called when you change vehicles. This returns an extra class called ```VehicleData``` which holds the static values of your car.
 (Car Name, Car Class, Performance Index, Drivetrain, Number of Cylinders, Car Type, Ordinal)
 
 ```java
