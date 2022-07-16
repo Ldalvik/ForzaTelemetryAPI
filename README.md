@@ -9,7 +9,7 @@ To begin using the ForzaTelemetryAPI, download the 4 required files, ```ForzaTel
 To use it in your code, implement it into the class you will be receiving data in.
 
 ```java
-class Main implements ForzaTelemetryApi
+class Main implements ForzaInterface
 ```
 
 You will need all 5 methods from the ```ForzaTelemetryApi``` to be implemented into your class for it to work. This is where data will be received.
