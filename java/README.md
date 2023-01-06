@@ -28,21 +28,25 @@ public static void main(String[] args) throws UnknownHostException {
 ```
 
 
-If you want to access the thread in the files scope, call ```getThread()``` like this instead:
+If you want to access the thread in the files scope, pass ```getThread()``` to a global variable.
+
+The full code would look like this:
 
 ```java
-public static void main(String[] args) throws UnknownHostException {
+class Main implements ForzaInterface {
+    public static void main(String[] args) throws UnknownHostException {
         Thread dataStreamThread = null;
         ForzaTelemetryBuilder builder = new ForzaTelemetryBuilder(/*Optional, default 5300*/)
                 .addListener(new Main()); 
                 dataStreamThread = builder.getThread();
                 dataStreamThread.start();
-}
+    }
 
-//You can now access the thread anywhere
-public void doInterrupt() {
-    if(dataStreamThread != null) {
-        dataStreamThread.interrupt();
+    //You can now access the thread anywhere
+    public void doInterrupt() {
+        if(dataStreamThread != null) {
+            dataStreamThread.interrupt();
+        }
     }
 }
 ```
