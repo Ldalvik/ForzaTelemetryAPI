@@ -4,7 +4,7 @@
 
 To begin using the ForzaTelemetryAPI, download the 4 required files, ```ForzaTelemetryApi.java```, ```ForzaTelemetryBuilder.java```, ```VehicleData.java``` and ```ForzaInterface.java```
 
-To use it in your code, implement it into the Main activity class you will be receiving data in.
+To use it in your code, implement it into the main activity class you will be receiving data in.
 
 ```java
 public class MainActivity extends AppCompatActivity implements ForzaInterface
@@ -13,13 +13,13 @@ public class MainActivity extends AppCompatActivity implements ForzaInterface
 To allow us to access the UDP thread anywhere in the class, we will create a global variable to populate later on.
 
 ```java
-public class MainActivity extends AppCompatActivity implements ForzaInterface
-{
-Thread udpThread;
+public class MainActivity extends AppCompatActivity implements ForzaInterface {
+  Thread udpThread;
 
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-  //...
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    //...
+  }
 }
 ```
 
