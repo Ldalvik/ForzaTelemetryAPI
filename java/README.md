@@ -34,8 +34,8 @@ The full code would look like this:
 
 ```java
 class Main implements ForzaInterface {
+    Thread dataStreamThread = null;
     public static void main(String[] args) throws UnknownHostException {
-        Thread dataStreamThread = null;
         ForzaTelemetryBuilder builder = new ForzaTelemetryBuilder(/*Optional, default 5300*/)
                 .addListener(new Main()); 
                 dataStreamThread = builder.getThread();
