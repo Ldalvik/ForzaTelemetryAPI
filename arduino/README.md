@@ -1,1 +1,0 @@
-# C ForzaTelemetryAPI (Arduino/ESP)
