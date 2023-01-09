@@ -1,7 +1,3 @@
-# ForzaTelemetryAPI
-Forza DATA OUT telemetry API. Used to pull data from in-game using its built in telemetry system.
-
-
 # Android ForzaTelemetryAPI
 If you are using the API for an android app, see https://github.com/Ldalvik/ForzaTelemetryAPI/tree/main/android
 
